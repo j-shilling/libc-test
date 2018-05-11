@@ -51,8 +51,10 @@ main (int argc, char *argv[])
       else if (0 == strcmp ("89", optarg))
         std = 1989;
       else
-        fprintf (stderr, "c%s is not supported\n", optarg);
-        goto print_help;
+        {
+          fprintf (stderr, "c%s is not supported\n", optarg);
+          goto print_help;
+        }
       break;
 
     case 'l':
