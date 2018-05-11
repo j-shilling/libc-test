@@ -10,7 +10,7 @@ AC_ARG_ENABLE([debug],
 	         yes) debug=true ;;
 		 no)  debug=false ;;
 		 *)   AC_MSG_ERROR([bad value ${enable_debug} for --enable-debug]) ;;
-	       esac],[debug-false])
+	       esac],[debug=false])
 
 if test "x$debug" = "xtrue"; then
 	CFLAGS="$CFLAGS -O0 -ggdb"
