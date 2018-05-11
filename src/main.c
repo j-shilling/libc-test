@@ -4,6 +4,7 @@
 #include <string.h>
 #include <dlfcn.h>
 #include <time.h>
+#include <stddef.h>
 
 #include <test-suite.h>
 
@@ -22,6 +23,7 @@ static char *strdup (const char *s);
 #endif
 
 static inline char *time_str (double time);
+static inline char *heap_str (ptrdiff_t change);
 
 int
 main (int argc, char *argv[])
@@ -168,15 +170,25 @@ main (int argc, char *argv[])
 	    }
 
 	  /* Execute test */
+	  void *heap_start = sbrk(0);
 	  clock_t t = clock();
 	  int result = (*cur_test)->test (symb);
 	  t = clock() - t;
+	  void *heap_end = sbrk(0);
 
+	  ptrdiff_t heap_change = heap_end - heap_start;
 	  double exec_time = ((double)t) / CLOCKS_PER_SEC;
 
 	  if (EXIT_SUCCESS == result)
 	    {
-	      printf ("PASS: %s\n\n", time_str(exec_time));
+              char *time = time_str (exec_time);
+	      char *heap = heap_str (heap_change);
+
+	      printf ("PASS: %10s %10s\n\n",
+			      time, heap);
+
+	      free (time);
+	      free (heap);
 	    }
 	  else
 	    {
@@ -213,6 +225,25 @@ time_str (double time)
     {
       asprintf (&ret, "%.2f ns", time * 1000000000);
     }
+
+  if (!ret)
+    ret = strdup ("?");
+
+  return ret;
+}
+
+static inline char *
+heap_str (ptrdiff_t change)
+{
+  ptrdiff_t abs_value = (change < 0) ? (change * -1) : (change);
+  char *ret = NULL;
+
+  if (abs_value > (1024 * 1024))
+    asprintf (&ret, "%jd Mi", abs_value / (1024 * 1024));
+  else if (abs_value > (1024))
+    asprintf (&ret, "%jd Ki", abs_value / (1024));
+  else 
+    asprintf (&ret, "%jd B", abs_value);
 
   if (!ret)
     ret = strdup ("?");
