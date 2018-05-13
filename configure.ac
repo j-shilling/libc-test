@@ -23,6 +23,18 @@ AC_PROG_CC
 AM_PROG_AR
 AC_PROG_RANLIB
 
+AC_PROG_YACC
+if test "x$YACC" = "xyacc"; then
+	AC_CHECK_PROG([HAVE_YACC], [yacc], [true], [false])
+	if test "x$HAVE_YACC" = "xfalse"; then
+		AC_MSG_ERROR([yacc compatible program required])
+	fi
+fi
+AM_PROG_LEX
+if test "x$LEX" = "x:"; then
+	AC_MSG_ERROR([lex compatible program requried])
+fi
+
 # Checks for libraries.
 AC_CHECK_LIB([dl], [dlopen], [],
 	     [AC_MSG_ERROR([Cannot link with dl])])

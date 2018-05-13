@@ -17,7 +17,7 @@ static int asprintf (char **strp, const char *fmt, ...);
 #endif 
 
 #ifdef __HAVE_STRDUP
-extern char *strdup (const char *s);
+//extern char *strdup (const char *s);
 #else
 static char *strdup (const char *s);
 #endif

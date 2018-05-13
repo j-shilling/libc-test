@@ -28,11 +28,21 @@ SUBDIRS = assert \
 	  wchar \
 	  wctype
 
+AM_YFLAGS = -d
+
 bin_PROGRAMS = libc-test
 
+BUILT_SOURCES = cpp.yacc.h
+CLEANFILES = cpp.yacc.c \
+	     cpp.yacc.h \
+	     cpp.lex.c
 libc_test_SOURCES = main.c \
-		    tests.c
-libc_test_CFLAGS = $(CFLAGS) -I$(srcdir)/inc
+		    tests.c \
+		    cpp.yacc.y \
+		    cpp.lex.l
+
+
+libc_test_CFLAGS = $(CFLAGS) -I$(top_srcdir)/include
 libc_test_LDADD = \
     assert/lib.a \
     complex/lib.a \
