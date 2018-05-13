@@ -38,6 +38,7 @@ CLEANFILES = cpp.yacc.c \
 	     cpp.lex.c
 libc_test_SOURCES = main.c \
 		    tests.c \
+		    include-dirs.c \
 		    cpp.yacc.y \
 		    cpp.lex.l
 

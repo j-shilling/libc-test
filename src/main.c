@@ -7,6 +7,7 @@
 #include <stddef.h>
 
 #include <test-suite.h>
+#include <include-dirs.h>
 
 #define N_TEST_SUITES		29
 
@@ -30,7 +31,6 @@ main (int argc, char *argv[])
 {
   /* Storage for user options */
   char *lib_path = NULL; /* path to libc */
-  char *inc_path = NULL; /* path to include dir with C headers */
   int std = 2011;        /* version of C to test */
 
   /* Null terminated array of test suites to run */
@@ -62,7 +62,7 @@ main (int argc, char *argv[])
       break;
 
     case 'I':
-      inc_path = optarg;
+      include_directories_add (optarg);
       break;
 
     case '?':
@@ -97,19 +97,6 @@ main (int argc, char *argv[])
   int i;
   for (i = optind; (i < argc) && ((i - optind) < N_TEST_SUITES); i++)
     requested_tests[i - optind] = argv[i];
-
-  /* We cannot do anything without an include dir or libc */
-  if (!lib_path && !inc_path)
-    {
-      printf ("Please specify the path to libc or include directory.\n");
-      exit (EXIT_SUCCESS);
-    }
-
-  if (inc_path)
-    {
-      printf ("Header tests are currently unsupported!\n");
-      inc_path = NULL;
-    }  
 
   /* load libc */
   void *libc = dlopen (lib_path, RTLD_LAZY);
