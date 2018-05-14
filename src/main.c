@@ -26,6 +26,8 @@ static char *strdup (const char *s);
 static inline char *time_str (double time);
 static inline char *heap_str (ptrdiff_t change);
 
+extern void cpp_parse_header (const char *);
+
 int
 main (int argc, char *argv[])
 {
@@ -92,6 +94,9 @@ main (int argc, char *argv[])
       exit (EXIT_FAILURE);
     }
   }
+
+  cpp_parse_header ("string.h");
+  return 1;
 
   /* All additional arguments are read as test suite names */
   int i;

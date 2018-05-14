@@ -11,11 +11,12 @@ AC_ARG_ENABLE([debug],
 		 no)  debug=false ;;
 		 *)   AC_MSG_ERROR([bad value ${enable_debug} for --enable-debug]) ;;
 	       esac],[debug=false])
+AM_CONDITIONAL([DEBUG], [test x$debug = xtrue])
 
 if test "x$debug" = "xtrue"; then
-	CFLAGS="$CFLAGS -O0 -ggdb"
+	CFLAGS="$CFLAGS -O0 -ggdb -DYYDEBUG=1"
 else
-	CFLAGS="$CFLAGS -O2"
+	CFLAGS="$CFLAGS -O2 -DYYDEBUG=0"
 fi
 
 # Checks for programs.
@@ -31,6 +32,12 @@ if test "x$YACC" = "xyacc"; then
 	fi
 fi
 AM_PROG_LEX
+if test "x$LEX" = "xflex"; then
+	CFLAGS="$CFLAGS -DFLEX=1"
+else
+	CFLAGS="$CFLAGS -DFLEX=0"
+fi
+
 if test "x$LEX" = "x:"; then
 	AC_MSG_ERROR([lex compatible program requried])
 fi

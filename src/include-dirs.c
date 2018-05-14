@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <sys/stat.h>
 
 include_directories_t *include_directories = NULL;
 
@@ -23,6 +24,18 @@ include_directories_add (char *path)
 {
   if (NULL == path)
     return;
+
+  struct stat info;
+  if (stat (path, &info))
+    {
+      perror ("Warning: ");
+      return;
+    }
+  if (!S_ISDIR (info.st_mode))
+    {
+      fprintf (stderr, "Warning: %s is not a directory.\n", path);
+      return;
+    }
 
   include_directories_t *node =
     (include_directories_t *) malloc (sizeof (include_directories));

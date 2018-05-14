@@ -2,14 +2,21 @@
 #define __INCLUDE_DIRS_H__
 
 #include <cdefs.h>
+#include <stdio.h>
 
 __BEGIN_DECLS
 
-typedef struct _include_directories
+struct _path_list
 {
   char *path;
-  struct _include_directories *next;
-} include_directories_t;
+  struct _path_list *next;
+};
+
+typedef struct _path_list include_directories_t;
+typedef struct _path_list include_queue_t;
+
+void include_queue_push (char *path, int global);
+int  include_queue_pop  (void);
 
 void include_directories_add (char *path);
 
