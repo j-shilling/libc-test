@@ -45,10 +45,8 @@ CLEANFILES = cpp.yacc.c \
 libc_test_SOURCES = main.c \
 		    tests.c \
 		    include-dirs.c \
-		    include-queue.c \
 		    cpp.yacc.y \
-		    cpp.lex.l \
-		    cpp.c
+		    cpp.lex.l
 
 
 libc_test_CFLAGS = $(CFLAGS) -I$(top_srcdir)/include
